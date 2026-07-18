@@ -39,7 +39,7 @@ def generate_graph_data():
     print("[+] Generated Graph datasets.")
 
 def generate_dp_data():
-    fib_scales = [30, 35, 40, 10000, 50000, 100000]
+    fib_scales = [1000, 10000, 100000]
     for scale in fib_scales:
         filename = os.path.join(DATA_DIR, "dynamic_programming", f"fibonacci_{scale}.csv")
         with open(filename, "w", newline="") as f:
@@ -47,26 +47,53 @@ def generate_dp_data():
             writer.writerow(["n"])
             writer.writerow([scale])
 
-    knap_scales = [512, 1024, 2048]
+    knap_scales = [100, 500, 1000]
+    capacities = [1000, 5000, 10000]
+
+    knap_dir = os.path.join(DATA_DIR, "dynamic_programming")
+
     for scale in knap_scales:
         random.seed(scale)
-        filename = os.path.join(DATA_DIR, "dynamic_programming", f"knapsack_{scale}.csv")
-        with open(filename, "w", newline="") as f:
+
+        # Generate the same items for all capacities
+        items_filename = os.path.join(
+            knap_dir,
+            f"knapsack_items_{scale}.csv"
+        )
+
+        with open(items_filename, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["weight", "value"])
-            for _ in range(scale):
-                w = random.randint(1, 100)
-                v = random.randint(10, 1000)
-                writer.writerow([w, v])
 
-    lcs_scales = [100, 1000, 5000]
+            for _ in range(scale):
+                weight = random.randint(1, 100)
+                value = random.randint(10, 1000)
+                writer.writerow([weight, value])
+
+        # Generate capacity configurations
+        for capacity in capacities:
+            capacity_filename = os.path.join(
+                knap_dir,
+                f"knapsack_{scale}_W{capacity}.txt"
+            )
+
+            with open(capacity_filename, "w") as f:
+                f.write(str(capacity))
+
+    # it will be the same for Edit Distance
+    lcs_scales = [100, 1000, 10000]
     bases = ["A", "C", "G", "T"]
     for scale in lcs_scales:
         random.seed(scale)
         s1 = "".join(random.choices(bases, k=scale))
         s2 = "".join(random.choices(bases, k=scale))
         filename = os.path.join(DATA_DIR, "dynamic_programming", f"lcs_{scale}.csv")
+        filename2 = os.path.join(DATA_DIR, "dynamic_programming", f"edit_distance_{scale}.csv")
         with open(filename, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["string1", "string2"])
+            writer.writerow([s1, s2])
+        with open(filename2, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["string1", "string2"])
             writer.writerow([s1, s2])
@@ -84,7 +111,7 @@ def generate_dp_data():
     print("[+] Generated DP datasets.")
 
 def generate_matrix_data():
-    scales = [64, 128, 256]
+    scales = [64, 256, 512]
     for scale in scales:
         random.seed(scale)
         for mat_label in ["A", "B"]:
@@ -98,9 +125,11 @@ def generate_matrix_data():
 
 if __name__ == "__main__":
     """
+    # runs just the first time
     create_dirs()
     """
-    #generate_sorting_data()
-    #generate_graph_data()
+    generate_sorting_data()
+    generate_graph_data()
     generate_dp_data()
-    #generate_matrix_data()
+    generate_matrix_data()
+    
