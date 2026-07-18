@@ -1,0 +1,15 @@
+You are an expert software engineer. Write a Python function for the 0-1 Knapsack problem.
+
+Function Name: knapsack_01
+Input:
+- `weights`: A list of integers representing the weights of the items.
+- `values`: A list of integers representing the values of the items.
+- `capacity`: An integer representing the maximum capacity of the knapsack.
+Output:
+- Returns an integer representing the maximum value that can be obtained.
+
+Constraints & Requirements:
+- You must implement the standard dynamic programming 0-1 Knapsack algorithm.
+- Return ONLY the executable Python code containing the function definition and helper functions if any.
+- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
+- Do NOT include any explanations, markdown comments, or conversational text.

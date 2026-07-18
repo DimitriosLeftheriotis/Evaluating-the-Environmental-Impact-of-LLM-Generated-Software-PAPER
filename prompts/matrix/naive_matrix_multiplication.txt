@@ -1,0 +1,14 @@
+You are an expert software engineer. Write a Python function for Naive Matrix Multiplication.
+
+Function Name: naive_matrix_multiplication
+Input:
+- `mat_A`: A 2D list of floats representing matrix A.
+- `mat_B`: A 2D list of floats representing matrix B.
+Output:
+- Returns a 2D list of floats representing the product of mat_A and mat_B.
+
+Constraints & Requirements:
+- You must implement the naive matrix multiplication algorithm (with O(N^3) time complexity).
+- Return ONLY the executable Python code containing the function definition and helper functions if any.
+- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
+- Do NOT include any explanations, markdown comments, or conversational text.

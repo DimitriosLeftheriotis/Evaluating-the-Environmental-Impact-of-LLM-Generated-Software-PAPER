@@ -1,0 +1,14 @@
+You are an expert software engineer. Write a Python function for Longest Common Subsequence (LCS).
+
+Function Name: lcs
+Input:
+- `s1`: A string.
+- `s2`: A string.
+Output:
+- Returns an integer representing the length of the longest common subsequence of `s1` and `s2`.
+
+Constraints & Requirements:
+- You must implement the dynamic programming Longest Common Subsequence algorithm.
+- Return ONLY the executable Python code containing the function definition and helper functions if any.
+- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
+- Do NOT include any explanations, markdown comments, or conversational text.

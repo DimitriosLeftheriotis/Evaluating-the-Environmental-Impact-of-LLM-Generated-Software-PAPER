@@ -1,0 +1,14 @@
+You are an expert software engineer. Write a Python function for Fibonacci.
+
+Function Name: fibonacci_memoized
+Input:
+- An integer `n`
+Output:
+- Returns the n-th Fibonacci number as an integer.
+
+Constraints & Requirements:
+- You must implement an efficient Fibonacci algorithm using memoization or dynamic programming.
+- Time complexity must be O(n).
+- Return ONLY the executable Python code containing the function definition and helper functions if any.
+- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
+- Do NOT include any explanations, markdown comments, or conversational text.

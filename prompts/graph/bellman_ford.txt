@@ -1,0 +1,14 @@
+You are an expert software engineer. Write a Python function for the Bellman-Ford Algorithm.
+
+Function Name: bellman_ford
+Input:
+- `adj_weighted`: A dictionary where keys are node IDs (integers from 0 to V-1) and values are lists of tuples `(neighbor_node_id, weight)` representing weighted edges.
+- `start_node`: An integer representing the starting node.
+Output:
+- Returns a dictionary mapping each node ID to its shortest distance from the `start_node`.
+
+Constraints & Requirements:
+- You must implement the Bellman-Ford shortest path algorithm.
+- Return ONLY the executable Python code containing the function definition and helper functions if any.
+- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
+- Do NOT include any explanations, markdown comments, or conversational text.

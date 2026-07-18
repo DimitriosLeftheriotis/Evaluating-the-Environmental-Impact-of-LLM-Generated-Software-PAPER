@@ -1,0 +1,12 @@
+You are an expert software engineer. Write a Python function for Matrix Transpose.
+
+Function Name: matrix_transpose
+Input:
+- `mat_A`: A 2D list of floats representing matrix A.
+Output:
+- Returns a 2D list of floats representing the transpose of mat_A.
+
+Constraints & Requirements:
+- Return ONLY the executable Python code containing the function definition and helper functions if any.
+- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
+- Do NOT include any explanations, markdown comments, or conversational text.
