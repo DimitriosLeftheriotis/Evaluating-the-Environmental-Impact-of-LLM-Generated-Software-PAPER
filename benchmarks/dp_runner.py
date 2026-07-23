@@ -98,6 +98,18 @@ for llm in LLMs:
             except FileNotFoundError:
                 print(f"[-] Data file not found for LCS scale {scale}")
 
+        # Edit Distance
+        for scale in lcs_scales:
+            try:
+                with open(os.path.join("data", PROBLEM, f"edit_distance_{scale}.csv"), "r") as f:
+                    reader = csv.reader(f)
+                    next(reader)
+                    row = next(reader)
+                    s1, s2 = row[0], row[1]
+                run_dp_benchmark("edit_distance", scale, s1, s2)
+            except FileNotFoundError:
+                print(f"[-] Data file not found for Edit Distance scale {scale}")
+
         # Optimal BST
         for scale in bst_scales:
             keys = []

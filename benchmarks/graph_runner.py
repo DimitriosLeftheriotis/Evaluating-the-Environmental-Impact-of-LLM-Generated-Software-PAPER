@@ -30,7 +30,7 @@ for llm in LLMs:
         return func
 
     scales = [100, 1000, 10000]
-    algorithms = ["bfs", "dfs", "dijkstra", "bellman_ford", "floyd_warshall"]
+    algorithms = ["dijkstra", "bellman_ford", "kruskal", "prim", "tarjan_scc", "dinic"]
 
     for scale in scales:
         # 1. Load the graph edge list CSV
@@ -76,11 +76,13 @@ for llm in LLMs:
                 os.makedirs(output_dir, exist_ok=True)
                 
                 with EmissionsTracker(project_name="paper", output_file=f"graph_{scale}.csv", output_dir=output_dir) as tracker:
-                    if algo in ["bfs", "dfs"]:
-                        result = func(adj_unweighted, 0)
-                    elif algo in ["dijkstra", "bellman_ford"]:
+                    if algo in ["dijkstra", "bellman_ford", "prim"]:
                         result = func(adj_weighted, 0)
-                    elif algo == "floyd_warshall":
+                    elif algo == "kruskal":
                         result = func(adj_weighted)
+                    elif algo == "tarjan_scc":
+                        result = func(adj_unweighted)
+                    elif algo == "dinic":
+                        result = func(adj_weighted, 0, scale - 1)
 
 print("[+] Graph benchmarking completed.")
