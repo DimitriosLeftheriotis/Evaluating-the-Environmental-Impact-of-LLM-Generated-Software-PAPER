@@ -35,13 +35,13 @@ for llm in LLMs:
     fib_mem_scales = [1000, 10000, 100000]
 
     # 2. Knapsack (weights, values, capacity)
-    knap_scales = [512, 1024, 2048]
+    knap_scales = [100, 500, 1000]
 
     # 3. LCS (string1, string2)
-    lcs_scales = [100, 1000, 5000]
+    lcs_scales = [100, 1000, 10000]
 
-    # 4. Matrix Chain (dimensions)
-    mcm_scales = [10, 50, 100]
+    # 4. Optimal BST (keys, p, q, n)
+    bst_scales = [10, 100, 1000]
 
     # Helper to run a trial
     def run_dp_benchmark(algo_name, scale, *args):
@@ -70,21 +70,21 @@ for llm in LLMs:
             except FileNotFoundError:
                 print(f"[-] Data file not found for Fibonacci scale {scale}")
 
-        # Knapsack
-        for scale in knap_scales:
-            weights = []
-            values = []
-            try:
-                with open(os.path.join("data", PROBLEM, f"knapsack_{scale}.csv"), "r") as f:
-                    reader = csv.reader(f)
-                    next(reader)
-                    for row in reader:
-                        weights.append(int(row[0]))
-                        values.append(int(row[1]))
-                capacity = scale * 10
-                run_dp_benchmark("knapsack_01", scale, weights, values, capacity)
-            except FileNotFoundError:
-                print(f"[-] Data file not found for Knapsack scale {scale}")
+        # Knapsack                                                                                                                                                                                                                                                              
+        for scale in knap_scales:                                                                                                                                                                                                                                               
+            weights = []                                                                                                                                                                                                                                                        
+            values = []                                                                                                                                                                                                                                                         
+            capacity = scale * 10                                                                                                                                                                                                                                               
+            try:                                                                                                                                                                                                                                                                
+                with open(os.path.join("data", PROBLEM, f"knapsack_{scale}_{capacity}.csv"), "r") as f:                                                                                                                                                                         
+                    reader = csv.reader(f)                                                                                                                                                                                                                                      
+                    next(reader)                                                                                                                                                                                                                                                
+                    for row in reader:                                                                                                                                                                                                                                          
+                        weights.append(int(row[0]))                                                                                                                                                                                                                             
+                        values.append(int(row[1]))                                                                                                                                                                                                                              
+                run_dp_benchmark("knapsack_01", scale, weights, values, capacity)                                                                                                                                                                                               
+            except FileNotFoundError:                                                                                                                                                                                                                                           
+                print(f"[-] Data file not found for Knapsack scale {scale} and capacity {capacity}")
 
         # LCS
         for scale in lcs_scales:
@@ -98,17 +98,23 @@ for llm in LLMs:
             except FileNotFoundError:
                 print(f"[-] Data file not found for LCS scale {scale}")
 
-        # Matrix Chain
-        for scale in mcm_scales:
-            dims = []
+        # Optimal BST
+        for scale in bst_scales:
+            keys = []
+            p = []
+            q = []
             try:
-                with open(os.path.join("data", PROBLEM, f"matrix_chain_{scale}.csv"), "r") as f:
+                with open(os.path.join("data", PROBLEM, f"optimal_bst_{scale}.csv"), "r") as f:
                     reader = csv.reader(f)
                     next(reader)
+                    row0 = next(reader)
+                    q.append(float(row0[2]))
                     for row in reader:
-                        dims.append(int(row[0]))
-                run_dp_benchmark("matrix_chain_multiplication", scale, dims)
+                        keys.append(int(row[0]))
+                        p.append(float(row[1]))
+                        q.append(float(row[2]))
+                run_dp_benchmark("optimal_bst", scale, keys, p, q, len(keys))
             except FileNotFoundError:
-                print(f"[-] Data file not found for Matrix Chain scale {scale}")
+                print(f"[-] Data file not found for Optimal BST scale {scale}")
 
 print("[+] Dynamic Programming benchmarking completed.")

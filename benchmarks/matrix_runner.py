@@ -28,7 +28,7 @@ for llm in LLMs:
             raise AttributeError(f"Function `{algorithm_name}` not found in module.")
         return func
 
-    scales = [64, 128, 256]
+    scales = [10, 100, 1000]
     algorithms = ["naive_matrix_multiplication", "strassen_algorithm", "matrix_transpose", "lu_decomposition", "matrix_determinant"]
 
     def load_matrix(filepath):

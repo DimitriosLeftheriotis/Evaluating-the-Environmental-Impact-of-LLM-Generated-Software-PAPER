@@ -23,7 +23,7 @@ def generate_sorting_data():
     print("[+] Generated Sorting datasets.")
 
 def generate_graph_data():
-    scales = [100, 1000, 10000]
+    scales = [10, 100, 1000]
     density = 0.75
     for scale in scales:
         G = nx.erdos_renyi_graph(n=scale, p=density, seed=scale, directed=False)
@@ -47,38 +47,49 @@ def generate_dp_data():
             writer.writerow(["n"])
             writer.writerow([scale])
 
-    knap_scales = [100, 500, 1000]
-    capacities = [1000, 5000, 10000]
+    knap_scales = [10, 100, 1000]
+    capacities = [100, 1000, 10000]
 
     knap_dir = os.path.join(DATA_DIR, "dynamic_programming")
 
     for scale in knap_scales:
-        random.seed(scale)
-
-        # Generate the same items for all capacities
-        items_filename = os.path.join(
-            knap_dir,
-            f"knapsack_items_{scale}.csv"
-        )
-
-        with open(items_filename, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(["weight", "value"])
-
-            for _ in range(scale):
-                weight = random.randint(1, 100)
-                value = random.randint(10, 1000)
-                writer.writerow([weight, value])
-
-        # Generate capacity configurations
         for capacity in capacities:
-            capacity_filename = os.path.join(
+            random.seed(scale * 100000 + capacity)
+
+            target_total_weight = 2 * capacity
+
+            # Generate random weights
+            weights = [random.randint(1, 100) for _ in range(scale)]
+
+            # Scale them so the total weight is about 2 * capacity
+            current_total = sum(weights)
+            factor = target_total_weight / current_total
+            weights = [max(1, round(w * factor)) for w in weights]
+
+            # Fix rounding errors so sum(weights) == 2 * capacity
+            diff = target_total_weight - sum(weights)
+            while diff != 0:
+                i = random.randrange(scale)
+                if diff > 0:
+                    weights[i] += 1
+                    diff -= 1
+                elif weights[i] > 1:
+                    weights[i] -= 1
+                    diff += 1
+
+            filename = os.path.join(
                 knap_dir,
-                f"knapsack_{scale}_W{capacity}.txt"
+                f"knapsack_{scale}_{capacity}.csv"
             )
 
-            with open(capacity_filename, "w") as f:
-                f.write(str(capacity))
+            with open(filename, "w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["capacity", capacity])
+                writer.writerow(["weight", "value"])
+
+                for weight in weights:
+                    value = random.randint(10, 1000)
+                    writer.writerow([weight, value])
 
     # it will be the same for Edit Distance
     lcs_scales = [100, 1000, 10000]
@@ -98,20 +109,26 @@ def generate_dp_data():
             writer.writerow(["string1", "string2"])
             writer.writerow([s1, s2])
 
-    mcm_scales = [10, 50, 100]
-    for scale in mcm_scales:
+    bst_scales = [10, 100, 1000]
+    for scale in bst_scales:
         random.seed(scale)
-        dims = [random.randint(5, 100) for _ in range(scale + 1)]
-        filename = os.path.join(DATA_DIR, "dynamic_programming", f"matrix_chain_{scale}.csv")
+        keys = sorted(random.sample(range(1, scale * 10), scale))
+        freqs = [round(random.uniform(0.1, 10.0), 4) for _ in range(2 * scale + 1)]
+        total = sum(freqs)
+        freqs = [round(f / total, 6) for f in freqs]
+        p = freqs[:scale]
+        q = freqs[scale:]
+        filename = os.path.join(DATA_DIR, "dynamic_programming", f"optimal_bst_{scale}.csv")
         with open(filename, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["dimension"])
-            for dim in dims:
-                writer.writerow([dim])
+            writer.writerow(["key", "p", "q"])
+            writer.writerow(["", "", q[0]])
+            for idx in range(scale):
+                writer.writerow([keys[idx], p[idx], q[idx + 1]])
     print("[+] Generated DP datasets.")
 
 def generate_matrix_data():
-    scales = [64, 256, 512]
+    scales = [10, 100, 1000]
     for scale in scales:
         random.seed(scale)
         for mat_label in ["A", "B"]:

@@ -40,7 +40,7 @@ for llm in LLMs:
         return func
 
     # Experimental scales & target algorithms
-    scales = [10000, 100000, 1000000]
+    scales = [1000, 10000, 100000]
     algorithms = ["bubble_sort", "insertion_sort", "merge_sort", "quick_sort", "heap_sort"]
 
     for scale in scales:

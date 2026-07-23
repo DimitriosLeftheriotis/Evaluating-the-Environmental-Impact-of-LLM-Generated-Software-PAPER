@@ -1,0 +1,16 @@
+You are an expert software engineer. Write a Python function for Optimal Binary Search Tree (Optimal BST).
+
+Function Name: optimal_bst
+Input:
+- `keys`: A list of sorted keys (integers).
+- `p`: A list of frequencies/probabilities of searching successful keys.
+- `q`: A list of dummy frequencies/probabilities of searching unsuccessful keys (from index 0 to n).
+- `n`: The number of successful keys (equal to length of keys/p).
+Output:
+- Returns a float representing the minimum expected cost of search in the optimal binary search tree.
+
+Constraints & Requirements:
+- You must implement the dynamic programming Optimal BST algorithm.
+- Return ONLY the executable Python code containing the function definition and helper functions if any.
+- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
+- Do NOT include any explanations, markdown comments, or conversational text.
