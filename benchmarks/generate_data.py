@@ -68,14 +68,19 @@ def generate_dp_data():
 
             # Fix rounding errors so sum(weights) == 2 * capacity
             diff = target_total_weight - sum(weights)
-            while diff != 0:
-                i = random.randrange(scale)
-                if diff > 0:
-                    weights[i] += 1
-                    diff -= 1
-                elif weights[i] > 1:
-                    weights[i] -= 1
-                    diff += 1
+
+            weights[-1] += diff
+
+            if weights[-1] < 1:
+                deficit = 1 - weights[-1]
+                weights[-1] = 1
+
+                for i in range(scale - 1):
+                    take = min(deficit, weights[i] - 1)
+                    weights[i] -= take
+                    deficit -= take
+                    if deficit == 0:
+                        break
 
             filename = os.path.join(
                 knap_dir,
