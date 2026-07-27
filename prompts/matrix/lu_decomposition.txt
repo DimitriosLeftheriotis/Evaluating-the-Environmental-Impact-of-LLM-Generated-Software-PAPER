@@ -1,13 +1,8 @@
-You are an expert software engineer. Write a Python function for LU Decomposition.
+Implement the LU Decomposition (Doolittle method) algorithm in Python.
 
-Function Name: lu_decomposition
-Input:
-- `mat_A`: A 2D list of floats representing a square matrix A.
-Output:
-- Returns a tuple of two 2D lists of floats `(L, U)` representing the Lower and Upper triangular matrices respectively.
-
-Constraints & Requirements:
-- You must implement the Doolittle or Crout algorithm for LU decomposition.
-- Return ONLY the executable Python code containing the function definition and helper functions if any.
-- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
-- Do NOT include any explanations, markdown comments, or conversational text.
+Requirements:
+- The function must be named `lu_decomposition`.
+- Input: A 2D list `matrix` representing a square matrix of size n×n.
+- Output: A tuple of two 2D lists (L, U), where L is the lower triangular matrix and U is the upper triangular matrix such that matrix = L × U.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

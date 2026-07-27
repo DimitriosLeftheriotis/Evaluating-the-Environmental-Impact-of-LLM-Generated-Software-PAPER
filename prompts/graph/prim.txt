@@ -1,0 +1,8 @@
+Implement Prim's algorithm to find the Minimum Spanning Tree (MST) in Python.
+
+Requirements:
+- The function must be named `prim`.
+- Input: An adjacency list representation `graph` (dict of int to list of tuples (neighbor, weight)) and a starting vertex `start` (int).
+- Output: A list of tuples `(parent, child, weight)` representing the Minimum Spanning Tree edges.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

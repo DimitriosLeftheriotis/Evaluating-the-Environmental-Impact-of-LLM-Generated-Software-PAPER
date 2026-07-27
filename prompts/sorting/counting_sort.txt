@@ -1,0 +1,8 @@
+Implement the Counting Sort algorithm in Python.
+
+Requirements:
+- The function must be named `counting_sort`.
+- Input: A list of integers `arr`.
+- Output: A new list containing the elements of `arr` sorted in ascending order.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

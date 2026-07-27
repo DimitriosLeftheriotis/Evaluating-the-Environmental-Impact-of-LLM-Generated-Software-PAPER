@@ -1,14 +1,8 @@
-You are an expert software engineer. Write a Python function for sorting a list of integers.
+Implement the Heap Sort algorithm in Python.
 
-Function Name: heap_sort
-Input:
-- A list of integers (e.g., [42, 7, 91])
-Output:
-- Returns a list containing the elements sorted in ascending order.
-
-Constraints & Requirements:
-- You must implement the standard `heap_sort` algorithm.
-- Do not use Python's built-in `sorted()` or `.sort()`.
-- Return ONLY the executable Python code containing the function definition and helper functions if any.
-- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
-- Do NOT include any explanations, markdown comments, or conversational text.
+Requirements:
+- The function must be named `heap_sort`.
+- Input: A list of integers `arr`.
+- Output: A new list containing the elements of `arr` sorted in ascending order.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

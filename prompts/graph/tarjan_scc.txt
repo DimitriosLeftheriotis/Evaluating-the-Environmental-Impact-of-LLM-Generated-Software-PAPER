@@ -1,0 +1,8 @@
+Implement Tarjan's strongly connected components (SCC) algorithm in Python.
+
+Requirements:
+- The function must be named `tarjan_scc`.
+- Input: A directed graph represented as an adjacency list `graph` (dict of int to list of int).
+- Output: A list of lists, where each sublist contains the vertices of a strongly connected component.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

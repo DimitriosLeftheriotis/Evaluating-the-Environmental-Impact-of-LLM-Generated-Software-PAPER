@@ -1,0 +1,8 @@
+Implement the Edit Distance (Levenshtein distance) algorithm in Python.
+
+Requirements:
+- The function must be named `edit_distance`.
+- Input: Two strings `str1` and `str2`.
+- Output: An integer representing the minimum number of operations (insertions, deletions, substitutions) required to transform `str1` into `str2`.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

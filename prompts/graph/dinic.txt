@@ -1,0 +1,8 @@
+Implement Dinic's algorithm for finding the maximum flow in Python.
+
+Requirements:
+- The function must be named `dinic`.
+- Input: A graph represented as an adjacency list `graph` (dict of int to list of tuples (neighbor, capacity)), a source node `source` (int), and a sink node `sink` (int).
+- Output: An integer representing the maximum flow from `source` to `sink`.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

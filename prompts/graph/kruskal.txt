@@ -1,0 +1,8 @@
+Implement Kruskal's algorithm to find the Minimum Spanning Tree (MST) in Python.
+
+Requirements:
+- The function must be named `kruskal`.
+- Input: An adjacency list representation `graph` (dict of int to list of tuples (neighbor, weight)).
+- Output: A list of tuples `(u, v, weight)` representing the edges included in the Minimum Spanning Tree.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.

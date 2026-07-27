@@ -1,14 +1,9 @@
-You are an expert software engineer. Write a Python function for Dijkstra's Algorithm.
 
-Function Name: dijkstra
-Input:
-- `adj_weighted`: A dictionary where keys are node IDs (integers from 0 to V-1) and values are lists of tuples `(neighbor_node_id, weight)` representing weighted edges.
-- `start_node`: An integer representing the starting node.
-Output:
-- Returns a dictionary mapping each node ID to its shortest distance from the `start_node`.
+Implement Dijkstra's shortest path algorithm in Python.
 
-Constraints & Requirements:
-- You must implement Dijkstra's shortest path algorithm.
-- Return ONLY the executable Python code containing the function definition and helper functions if any.
-- Do NOT wrap the code in markdown code blocks (like ```python ... ```).
-- Do NOT include any explanations, markdown comments, or conversational text.
+Requirements:
+- The function must be named `dijkstra`.
+- Input: A weighted adjacency list `graph` (dict of int to list of tuples (neighbor, weight)) and a starting node `start` (int).
+- Output: A dictionary mapping each reachable node to its shortest distance from `start`.
+- Do not use any external libraries (only Python standard library).
+- Include no print statements or I/O within the function.
