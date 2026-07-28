@@ -6,18 +6,22 @@ def merge_sort(arr):
     left = merge_sort(arr[:mid])
     right = merge_sort(arr[mid:])
 
-    merged = []
+    return _merge(left, right)
+
+
+def _merge(left, right):
+    result = []
     i = j = 0
 
     while i < len(left) and j < len(right):
         if left[i] <= right[j]:
-            merged.append(left[i])
+            result.append(left[i])
             i += 1
         else:
-            merged.append(right[j])
+            result.append(right[j])
             j += 1
 
-    merged.extend(left[i:])
-    merged.extend(right[j:])
+    result.extend(left[i:])
+    result.extend(right[j:])
 
-    return merged
+    return result
