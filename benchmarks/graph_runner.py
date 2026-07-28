@@ -47,17 +47,17 @@ for llm in LLMs:
             adj_weighted[v].append((u, w))
 
         # 3. Execute Benchmarks (1 trial)
-        for i in range(1, 2):
-            for algo in algorithms:
-                try:
-                    func = load_algorithm(llm, PROBLEM, algo)
-                except Exception as e:
-                    print(f"[-] Skipping {algo}: {e}")
-                    continue
+        for algo in algorithms:
+            try:
+                func = load_algorithm(llm, PROBLEM, algo)
+            except Exception as e:
+                print(f"[-] Skipping {algo}: {e}")
+                continue
 
-                output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
-                os.makedirs(output_dir, exist_ok=True)
-                
+            output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
+            os.makedirs(output_dir, exist_ok=True)
+            
+            for i in range(1, 2):
                 with EmissionsTracker(project_name="paper", output_file=f"graph_{scale}.csv", output_dir=output_dir) as tracker:
                     if algo in ["dijkstra", "bellman_ford", "prim"]:
                         result = func(adj_weighted, 0)

@@ -34,20 +34,20 @@ for llm in LLMs:
             print(f"[-] Data file not found: {csv_path}. Please run generate_data.py first.")
             continue
 
-        # Running a single trial (1, 2) matches range(1, 2) in your original script
-        for i in range(1, 2):
-            for algo in algorithms:
-                try:
-                    # Load function dynamically from generated_code/{llm}/{PROBLEM}/{algo}.py
-                    function = load_algorithm(llm, PROBLEM, algo)
-                except Exception as e:
-                    # Log load failures (e.g. if the llm file is not generated yet) and skip
-                    print(f"[-] Skipping {algo}: {e}")
-                    continue
+        for algo in algorithms:
+            try:
+                # Load function dynamically from generated_code/{llm}/{PROBLEM}/{algo}.py
+                function = load_algorithm(llm, PROBLEM, algo)
+            except Exception as e:
+                # Log load failures (e.g. if the llm file is not generated yet) and skip
+                print(f"[-] Skipping {algo}: {e}")
+                continue
 
-                output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
-                os.makedirs(output_dir, exist_ok=True)
-                
+            output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
+            os.makedirs(output_dir, exist_ok=True)
+            
+            # Running a single trial (1, 2) matches range(1, 2) in your original script
+            for i in range(1, 2):
                 with EmissionsTracker(project_name="paper", output_file=f"numbers_{scale}.csv", output_dir=output_dir) as tracker:
                     ordered_numbers = function(unordered_numbers)
 

@@ -154,4 +154,5 @@ if __name__ == "__main__":
     generate_graph_data()
     generate_dp_data()
     generate_matrix_data()
+    print("it works")
     

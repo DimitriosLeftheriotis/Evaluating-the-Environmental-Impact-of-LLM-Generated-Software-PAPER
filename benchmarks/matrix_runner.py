@@ -32,17 +32,17 @@ for llm in LLMs:
             continue
 
         # Running a single trial (1, 2)
-        for i in range(1, 2):
-            for algo in algorithms:
-                try:
-                    func = load_algorithm(llm, PROBLEM, algo)
-                except Exception as e:
-                    print(f"[-] Skipping {algo}: {e}")
-                    continue
+        for algo in algorithms:
+            try:
+                func = load_algorithm(llm, PROBLEM, algo)
+            except Exception as e:
+                print(f"[-] Skipping {algo}: {e}")
+                continue
 
-                output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
-                os.makedirs(output_dir, exist_ok=True)
-                
+            output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
+            os.makedirs(output_dir, exist_ok=True)
+            
+            for i in range(1, 2):
                 with EmissionsTracker(project_name="paper", output_file=f"matrix_{scale}.csv", output_dir=output_dir) as tracker:
                     if algo in ["naive_matrix_multiplication", "strassen_algorithm"]:
                         result = func(mat_A, mat_B)
