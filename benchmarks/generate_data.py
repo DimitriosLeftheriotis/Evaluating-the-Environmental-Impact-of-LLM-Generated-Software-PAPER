@@ -10,7 +10,8 @@ def create_dirs():
         os.makedirs(os.path.join(DATA_DIR, sub), exist_ok=True)
 
 def generate_sorting_data():
-    scales = [1000, 10000, 100000]
+    #scales = [1000, 10000, 100000]
+    scales = [1000000]
     for scale in scales:
         random.seed(scale)
         numbers = random.sample(range(10**6 + 1), scale)
@@ -151,8 +152,6 @@ if __name__ == "__main__":
     create_dirs()
     """
     generate_sorting_data()
-    generate_graph_data()
-    generate_dp_data()
-    generate_matrix_data()
-    print("it works")
-    
+    #generate_graph_data()
+    #generate_dp_data()
+    #generate_matrix_data()

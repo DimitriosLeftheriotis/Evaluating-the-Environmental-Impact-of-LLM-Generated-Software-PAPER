@@ -45,9 +45,8 @@ for llm in LLMs:
 
             output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
             os.makedirs(output_dir, exist_ok=True)
-            
-            # Running a single trial (1, 2) matches range(1, 2) in your original script
-            for i in range(1, 2):
+
+            for i in range(1, 11):
                 with EmissionsTracker(project_name="paper", output_file=f"numbers_{scale}.csv", output_dir=output_dir) as tracker:
                     ordered_numbers = function(unordered_numbers)
 

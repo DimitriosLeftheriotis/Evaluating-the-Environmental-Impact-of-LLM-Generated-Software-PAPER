@@ -57,7 +57,7 @@ for llm in LLMs:
             output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
             os.makedirs(output_dir, exist_ok=True)
             
-            for i in range(1, 2):
+            for i in range(1, 11):
                 with EmissionsTracker(project_name="paper", output_file=f"graph_{scale}.csv", output_dir=output_dir) as tracker:
                     if algo in ["dijkstra", "bellman_ford", "prim"]:
                         result = func(adj_weighted, 0)

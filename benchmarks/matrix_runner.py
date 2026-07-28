@@ -31,7 +31,6 @@ for llm in LLMs:
             print(f"[-] Data file not found for Matrix scale {scale}. Please run generate_data.py first.")
             continue
 
-        # Running a single trial (1, 2)
         for algo in algorithms:
             try:
                 func = load_algorithm(llm, PROBLEM, algo)
@@ -42,7 +41,7 @@ for llm in LLMs:
             output_dir = f"results/{llm}/{PROBLEM}/{algo}/"
             os.makedirs(output_dir, exist_ok=True)
             
-            for i in range(1, 2):
+            for i in range(1, 11):
                 with EmissionsTracker(project_name="paper", output_file=f"matrix_{scale}.csv", output_dir=output_dir) as tracker:
                     if algo in ["naive_matrix_multiplication", "strassen_algorithm"]:
                         result = func(mat_A, mat_B)

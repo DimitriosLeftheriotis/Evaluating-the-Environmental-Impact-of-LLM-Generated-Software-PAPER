@@ -40,8 +40,7 @@ for llm in LLMs:
         with EmissionsTracker(project_name="paper", output_file=f"dp_{scale}.csv", output_dir=output_dir) as tracker:
             result = func(*args)
 
-    # Running a single trial (1, 2)
-    for i in range(1, 2):
+    for i in range(1, 11):
         # Fibonacci memoized
         for scale in fib_mem_scales:
             try:
