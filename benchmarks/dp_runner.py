@@ -18,7 +18,7 @@ for llm in LLMs:
     fib_mem_scales = [1000, 10000, 100000]
 
     # 2. Knapsack (weights, values, capacity)
-    knap_scales = [100, 500, 1000]
+    knap_scales = [10, 100, 1000]
 
     # 3. LCS (string1, string2)
     lcs_scales = [100, 1000, 10000]
