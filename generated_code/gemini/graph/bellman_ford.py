@@ -1,22 +1,31 @@
-def bellman_ford(edges, n, source):
-    # Initialize distances from source to all other vertices as infinity
-    distances = {i: float('inf') for i in range(n)}
+def bellman_ford(graph: dict, source: int):
+    # Initialize distances for all nodes in the graph to infinity
+    distances = {node: float('inf') for node in graph}
     distances[source] = 0
 
-    # Relax all edges n - 1 times
-    for _ in range(n - 1):
+    num_vertices = len(graph)
+
+    # Relax edges up to |V| - 1 times
+    for _ in range(num_vertices - 1):
         updated = False
-        for u, v, weight in edges:
-            if distances[u] != float('inf') and distances[u] + weight < distances[v]:
-                distances[v] = distances[u] + weight
-                updated = True
-        # Optimization: If no distances were updated, we can stop early
+        for node in graph:
+            if distances[node] == float('inf'):
+                continue
+            for neighbor, weight in graph[node]:
+                if distances[node] + weight < distances[neighbor]:
+                    distances[neighbor] = distances[node] + weight
+                    updated = True
+        
+        # Optimization: stop early if no distances changed in this iteration
         if not updated:
             break
 
     # Check for negative-weight cycles
-    for u, v, weight in edges:
-        if distances[u] != float('inf') and distances[u] + weight < distances[v]:
-            return None
+    for node in graph:
+        if distances[node] == float('inf'):
+            continue
+        for neighbor, weight in graph[node]:
+            if distances[node] + weight < distances[neighbor]:
+                return None
 
     return distances

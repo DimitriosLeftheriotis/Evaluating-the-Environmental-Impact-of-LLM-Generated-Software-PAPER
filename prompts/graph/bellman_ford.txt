@@ -2,7 +2,7 @@ Implement the Bellman-Ford shortest path algorithm in Python.
 
 Requirements:
 - The function must be named `bellman_ford`.
-- Input: A list of edges `edges` (list of tuples (u, v, weight)), number of vertices `n` (int), and a source node `source` (int).
+- Input: A weighted adjacency list `graph` (dict of int to list of tuples (neighbor, weight)) and a starting node `source` (int).
 - Output: A dictionary mapping each node to its shortest distance from `source`. If a negative cycle is detected, return None.
 - Do not use any external libraries (only Python standard library).
 - Include no print statements or I/O within the function.
