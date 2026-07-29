@@ -15,7 +15,7 @@ for llm in LLMs:
     # Dynamic Loader Helper
 
     # Experimental scales & target algorithms
-    scales = [1000, 10000, 100000]
+    scales = [10000, 100000, 1000000]
     algorithms = ["bubble_sort", "merge_sort", "heap_sort", "radix_sort", "counting_sort"]
 
     for scale in scales:
