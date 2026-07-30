@@ -11,7 +11,7 @@ PROBLEM = "matrix"
 
 for llm in LLMs:
 
-    scales = [10, 100, 1000]
+    scales = [8, 128, 1024]
     algorithms = ["naive_matrix_multiplication", "strassen_algorithm", "matrix_transpose", "lu_decomposition", "matrix_determinant"]
 
     def load_matrix(filepath):

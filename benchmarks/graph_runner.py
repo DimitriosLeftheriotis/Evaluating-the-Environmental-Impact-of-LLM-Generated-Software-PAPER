@@ -1,6 +1,6 @@
 import os
 import sys
-import os
+sys.setrecursionlimit(10000)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils import load_algorithm
 import csv
@@ -12,7 +12,7 @@ PROBLEM = "graph"
 
 for llm in LLMs:
 
-    scales = [100, 1000, 10000]
+    scales = [10, 100, 1000]
     algorithms = ["dijkstra", "bellman_ford", "kruskal", "prim", "tarjan_scc", "dinic"]
 
     for scale in scales:

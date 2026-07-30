@@ -133,7 +133,7 @@ def generate_dp_data():
     print("[+] Generated DP datasets.")
 
 def generate_matrix_data():
-    scales = [10, 100, 1000]
+    scales = [8, 128, 1024]
     for scale in scales:
         random.seed(scale)
         for mat_label in ["A", "B"]:
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     # runs just the first time
     create_dirs()
     """
-    generate_sorting_data()
+    #generate_sorting_data()
     #generate_graph_data()
     #generate_dp_data()
-    #generate_matrix_data()
+    generate_matrix_data()
