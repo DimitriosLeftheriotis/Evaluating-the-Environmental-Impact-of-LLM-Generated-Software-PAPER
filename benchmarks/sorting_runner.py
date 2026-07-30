@@ -47,7 +47,7 @@ for llm in LLMs:
             os.makedirs(output_dir, exist_ok=True)
 
             for i in range(1, 11):
-                with EmissionsTracker(project_name="paper", output_file=f"numbers_{scale}.csv", output_dir=output_dir) as tracker:
+                with EmissionsTracker(project_name="paper", output_file=f"{algo}_{scale}.csv", output_dir=output_dir) as tracker:
                     ordered_numbers = function(unordered_numbers)
 
 print("[+] Benchmarking run completed.")

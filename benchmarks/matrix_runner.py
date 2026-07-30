@@ -42,7 +42,7 @@ for llm in LLMs:
             os.makedirs(output_dir, exist_ok=True)
             
             for i in range(1, 11):
-                with EmissionsTracker(project_name="paper", output_file=f"matrix_{scale}.csv", output_dir=output_dir) as tracker:
+                with EmissionsTracker(project_name="paper", output_file=f"{algo}_{scale}.csv", output_dir=output_dir) as tracker:
                     if algo in ["naive_matrix_multiplication", "strassen_algorithm"]:
                         result = func(mat_A, mat_B)
                     elif algo in ["matrix_transpose", "lu_decomposition", "matrix_determinant"]:

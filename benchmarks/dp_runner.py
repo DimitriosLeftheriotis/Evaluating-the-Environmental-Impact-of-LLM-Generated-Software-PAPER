@@ -37,7 +37,7 @@ for llm in LLMs:
         output_dir = f"results/{llm}/{PROBLEM}/{algo_name}/"
         os.makedirs(output_dir, exist_ok=True)
         
-        with EmissionsTracker(project_name="paper", output_file=f"dp_{scale}.csv", output_dir=output_dir) as tracker:
+        with EmissionsTracker(project_name="paper", output_file=f"{algo_name}_{scale}.csv", output_dir=output_dir) as tracker:
             result = func(*args)
 
     for i in range(1, 11):
@@ -59,8 +59,9 @@ for llm in LLMs:
             capacity = scale * 10                                                                                                                                                                                                                                               
             try:                                                                                                                                                                                                                                                                
                 with open(os.path.join("data", PROBLEM, f"knapsack_{scale}_{capacity}.csv"), "r") as f:                                                                                                                                                                         
-                    reader = csv.reader(f)                                                                                                                                                                                                                                      
-                    next(reader)                                                                                                                                                                                                                                                
+                    reader = csv.reader(f)
+                    next(reader) # Skip capacity row
+                    next(reader) # Skip weight,value row
                     for row in reader:                                                                                                                                                                                                                                          
                         weights.append(int(row[0]))                                                                                                                                                                                                                             
                         values.append(int(row[1]))                                                                                                                                                                                                                              
