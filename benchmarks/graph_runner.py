@@ -11,7 +11,7 @@ LLMs = ["chatgpt", "claude", "gemini"]
 PROBLEM = "graph"
 
 for llm in LLMs:
-
+                        
     scales = [10, 100, 1000]
     algorithms = ["dijkstra", "bellman_ford", "kruskal", "prim", "tarjan_scc", "dinic"]
 
