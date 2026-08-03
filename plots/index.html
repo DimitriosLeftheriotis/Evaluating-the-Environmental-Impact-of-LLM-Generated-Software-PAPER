@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Median Emissions Benchmark Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --chatgpt: #10a37f;
+            --claude: #d97706;
+            --gemini: #3b82f6;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--card-bg);
+            padding: 18px 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+        select, button {
+            background-color: #0f172a;
+            color: #fff;
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        select:hover, button:hover {
+            border-color: #38bdf8;
+        }
+        .btn-toggle.active {
+            background-color: #0284c7;
+            border-color: #38bdf8;
+        }
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+        .chart-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .chart-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .chart-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .chart-container {
+            position: relative;
+            height: 450px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Evaluating LLM Code Efficiency: Median Emissions</h1>
+        <p>Interactive comparison of ChatGPT, Claude, and Gemini across 21 algorithms and 3 scales</p>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Select Category</label>
+            <select id="catSelect" onchange="onCategoryChange()">
+                <option value="all">All Categories</option>
+                <option value="dynamic_programming">Dynamic Programming</option>
+                <option value="graph">Graph</option>
+                <option value="matrix">Matrix</option>
+                <option value="sorting">Sorting</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>Select Algorithm</label>
+            <select id="algoSelect" onchange="renderMainChart()"></select>
+        </div>
+
+        <div class="control-group">
+            <label>Chart Type</label>
+            <div class="btn-group">
+                <button id="btnLine" class="btn-toggle active" onclick="setChartType('line')">Line Plot</button>
+                <button id="btnBar" class="btn-toggle" onclick="setChartType('bar')">Bar Chart</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="chart-header">
+            <div>
+                <div class="chart-title" id="mainChartTitle">Edit Distance</div>
+                <div class="chart-subtitle" id="mainChartSub">Category: Dynamic Programming</div>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="mainChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const data = {
+  "edit_distance": {
+    "category": "dynamic_programming",
+    "title": "Edit Distance",
+    "scales": [
+      "100",
+      "1000",
+      "10000"
+    ],
+    "series": {
+      "chatgpt": [
+        8.542189008153361e-09,
+        5.352359342416311e-07,
+        5.962355970131038e-05
+      ],
+      "claude": [
+        4.9389903014433894e-09,
+        5.257576573955919e-07,
+        5.870039885620466e-05
+      ],
+      "gemini": [
+        4.6484144909228015e-09,
+        5.111358654330829e-07,
+        5.822868097709954e-05
+      ]
+    }
+  },
+  "fibonacci_memoized": {
+    "category": "dynamic_programming",
+    "title": "Fibonacci Memoized",
+    "scales": [
+      "1000",
+      "10000",
+      "100000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.7475791107378205e-09,
+        4.872878131850891e-09,
+        6.610430476045586e-07
+      ],
+      "claude": [
+        5.4355709021498916e-09,
+        4.6746173482270675e-09,
+        6.350938944726949e-07
+      ],
+      "gemini": [
+        4.730440273828224e-09,
+        4.6856445072353e-09,
+        5.64233783072274e-07
+      ]
+    }
+  },
+  "knapsack_01": {
+    "category": "dynamic_programming",
+    "title": "Knapsack 01",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.8006927274584316e-09,
+        4.634396908057738e-09,
+        4.166278555718277e-06
+      ],
+      "claude": [
+        4.907409443527413e-09,
+        4.8702742209526814e-09,
+        4.118366708565574e-06
+      ],
+      "gemini": [
+        4.5327177197006225e-09,
+        5.2573955749189614e-09,
+        4.975271584868882e-06
+      ]
+    }
+  },
+  "lcs": {
+    "category": "dynamic_programming",
+    "title": "Lcs",
+    "scales": [
+      "100",
+      "1000",
+      "10000"
+    ],
+    "series": {
+      "chatgpt": [
+        5.052019549624314e-09,
+        4.352534996412634e-07,
+        4.724650720481466e-05
+      ],
+      "claude": [
+        5.0144869718396584e-09,
+        4.365548490775261e-07,
+        4.734158350950372e-05
+      ],
+      "gemini": [
+        4.867302689860743e-09,
+        3.811588557819053e-07,
+        4.618396230101433e-05
+      ]
+    }
+  },
+  "optimal_bst": {
+    "category": "dynamic_programming",
+    "title": "Optimal Bst",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.849616759135213e-09,
+        4.629684005376018e-09,
+        6.197456179069419e-05
+      ],
+      "claude": [
+        5.0233123001021775e-09,
+        4.668780588643296e-09,
+        6.306524348314788e-05
+      ],
+      "gemini": [
+        4.598878594203477e-09,
+        4.587784729756633e-09,
+        6.471115103205187e-05
+      ]
+    }
+  },
+  "bellman_ford": {
+    "category": "graph",
+    "title": "Bellman Ford",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.832751106489362e-09,
+        4.956376113136867e-09,
+        8.074274391250767e-07
+      ],
+      "claude": [
+        4.6527694319729374e-09,
+        4.654058423612387e-09,
+        7.177135700688315e-07
+      ],
+      "gemini": [
+        4.737111576386522e-09,
+        4.668665398866147e-09,
+        8.166907836873787e-07
+      ]
+    }
+  },
+  "dijkstra": {
+    "category": "graph",
+    "title": "Dijkstra",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.834779322180951e-09,
+        5.317849257104574e-09,
+        2.541551121509661e-07
+      ],
+      "claude": [
+        4.647520432904039e-09,
+        4.7250147923983134e-09,
+        3.0493532120707e-07
+      ],
+      "gemini": [
+        4.599504159053833e-09,
+        4.870223319816491e-09,
+        4.1341464349281547e-07
+      ]
+    }
+  },
+  "dinic": {
+    "category": "graph",
+    "title": "Dinic",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.921503182799978e-09,
+        4.885495137559039e-09,
+        7.635694409170763e-06
+      ],
+      "claude": [
+        4.556940352516188e-09,
+        4.742640278108623e-09,
+        1.0710912967290384e-05
+      ],
+      "gemini": [
+        4.6048782055986725e-09,
+        4.901333959117885e-09,
+        6.0436012255901394e-06
+      ]
+    }
+  },
+  "kruskal": {
+    "category": "graph",
+    "title": "Kruskal",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.709985810775995e-09,
+        5.262546078284758e-09,
+        2.1611964915514123e-06
+      ],
+      "claude": [
+        4.590040562901981e-09,
+        4.646022956127446e-09,
+        1.7424923673778711e-06
+      ],
+      "gemini": [
+        4.903390791919446e-09,
+        4.803653006153163e-09,
+        1.677834642036572e-06
+      ]
+    }
+  },
+  "prim": {
+    "category": "graph",
+    "title": "Prim",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.588384244933509e-09,
+        5.62288647186286e-09,
+        1.6639208385141376e-06
+      ],
+      "claude": [
+        4.753927112049349e-09,
+        4.775788730237579e-09,
+        5.073417607296974e-07
+      ],
+      "gemini": [
+        4.708386709372473e-09,
+        4.836160685896873e-09,
+        1.6748927039468811e-06
+      ]
+    }
+  },
+  "tarjan_scc": {
+    "category": "graph",
+    "title": "Tarjan Scc",
+    "scales": [
+      "10",
+      "100",
+      "1000"
+    ],
+    "series": {
+      "chatgpt": [
+        4.987449743622063e-09,
+        5.095942133322312e-09,
+        3.407786000682294e-07
+      ],
+      "claude": [
+        4.693501347962478e-09,
+        4.685110199532725e-09,
+        4.021293761707314e-07
+      ],
+      "gemini": [
+        4.971751793412334e-09,
+        4.764708878279005e-09,
+        3.3148869691302e-07
+      ]
+    }
+  },
+  "lu_decomposition": {
+    "category": "matrix",
+    "title": "Lu Decomposition",
+    "scales": [
+      "8",
+      "128",
+      "1024"
+    ],
+    "series": {
+      "chatgpt": [
+        1.6422373424015452e-08,
+        5.7430919905329345e-09,
+        7.390236272655514e-05
+      ],
+      "claude": [
+        5.9880280014022145e-09,
+        5.803994061637203e-09,
+        7.358551901235426e-05
+      ],
+      "gemini": [
+        5.698068443418501e-09,
+        5.9057843740433156e-09,
+        7.482320428175882e-05
+      ]
+    }
+  },
+  "matrix_determinant": {
+    "category": "matrix",
+    "title": "Matrix Determinant",
+    "scales": [
+      "8",
+      "128",
+      "1024"
+    ],
+    "series": {
+      "chatgpt": [
+        8.887644226577671e-09,
+        2.953580292051928e-07,
+        0.0001626202146995
+      ],
+      "claude": [
+        1.6883605014262954e-08,
+        5.733977433177426e-09,
+        5.107475189315362e-05
+      ],
+      "gemini": [
+        5.907242606820247e-09,
+        7.0366575936504e-07,
+        0.0003041668389823
+      ]
+    }
+  },
+  "matrix_transpose": {
+    "category": "matrix",
+    "title": "Matrix Transpose",
+    "scales": [
+      "8",
+      "128",
+      "1024"
+    ],
+    "series": {
+      "chatgpt": [
+        5.963779892620031e-09,
+        5.736985717628308e-09,
+        5.7884099087241e-09
+      ],
+      "claude": [
+        6.109005235331349e-09,
+        5.883391272190646e-09,
+        5.832393844805386e-09
+      ],
+      "gemini": [
+        5.7775590817777155e-09,
+        5.759758829741053e-09,
+        4.21085749176593e-07
+      ]
+    }
+  },
+  "naive_matrix_multiplication": {
+    "category": "matrix",
+    "title": "Naive Matrix Multiplication",
+    "scales": [
+      "8",
+      "128",
+      "1024"
+    ],
+    "series": {
+      "chatgpt": [
+        1.8126126672553077e-08,
+        3.344943375022079e-07,
+        0.0002822917849333
+      ],
+      "claude": [
+        6.0343965381363435e-09,
+        2.3447768681241645e-07,
+        0.0002197392003022
+      ],
+      "gemini": [
+        5.7512169818878384e-09,
+        3.386865547010727e-07,
+        0.0003411616759857
+      ]
+    }
+  },
+  "strassen_algorithm": {
+    "category": "matrix",
+    "title": "Strassen Algorithm",
+    "scales": [
+      "8",
+      "128",
+      "1024"
+    ],
+    "series": {
+      "chatgpt": [
+        5.957362315009442e-09,
+        5.359600267283043e-06,
+        0.0019136765026953
+      ],
+      "claude": [
+        6.7312642118746854e-09,
+        5.67559755054972e-06,
+        0.0019697807287881
+      ],
+      "gemini": [
+        5.8578525254380235e-09,
+        5.219072100846583e-06,
+        0.0018071623638008
+      ]
+    }
+  },
+  "bubble_sort": {
+    "category": "sorting",
+    "title": "Bubble Sort",
+    "scales": [
+      "1000",
+      "10000",
+      "100000"
+    ],
+    "series": {
+      "chatgpt": [
+        6.982360237839643e-09,
+        7.236727077315316e-06,
+        0.0007563323107324
+      ],
+      "claude": [
+        5.634688508984426e-09,
+        7.40972623566716e-06,
+        0.0007544814053972
+      ],
+      "gemini": [
+        5.669221575219898e-09,
+        7.443202978739663e-06,
+        0.0007595156746359
+      ]
+    }
+  },
+  "counting_sort": {
+    "category": "sorting",
+    "title": "Counting Sort",
+    "scales": [
+      "1000",
+      "10000",
+      "100000"
+    ],
+    "series": {
+      "chatgpt": [
+        2.349069614267914e-07,
+        1.943090601434886e-07,
+        2.211827497810756e-07
+      ],
+      "claude": [
+        6.287889519846973e-09,
+        5.717505888478741e-09,
+        2.5123571082510974e-07
+      ],
+      "gemini": [
+        5.663389826427029e-09,
+        5.731483869465467e-09,
+        2.48002331322883e-07
+      ]
+    }
+  },
+  "heap_sort": {
+    "category": "sorting",
+    "title": "Heap Sort",
+    "scales": [
+      "1000",
+      "10000",
+      "100000"
+    ],
+    "series": {
+      "chatgpt": [
+        1.85914150317783e-08,
+        5.9907075127620245e-09,
+        6.843467484855754e-07
+      ],
+      "claude": [
+        5.690093236801203e-09,
+        5.748737342173372e-09,
+        7.068101028914049e-07
+      ],
+      "gemini": [
+        5.810922977568149e-09,
+        5.6519469676915185e-09,
+        7.156870039871368e-07
+      ]
+    }
+  },
+  "merge_sort": {
+    "category": "sorting",
+    "title": "Merge Sort",
+    "scales": [
+      "1000",
+      "10000",
+      "100000"
+    ],
+    "series": {
+      "chatgpt": [
+        5.9477254167467635e-09,
+        5.726269006872214e-09,
+        4.4226548932985046e-07
+      ],
+      "claude": [
+        5.791572040020506e-09,
+        5.778019601535863e-09,
+        4.3739591609665286e-07
+      ],
+      "gemini": [
+        5.870685331744669e-09,
+        5.7550326431211674e-09,
+        4.374501740597529e-07
+      ]
+    }
+  },
+  "radix_sort": {
+    "category": "sorting",
+    "title": "Radix Sort",
+    "scales": [
+      "1000",
+      "10000",
+      "100000"
+    ],
+    "series": {
+      "chatgpt": [
+        6.276890688220083e-09,
+        5.8651480666966365e-09,
+        2.297482615236225e-07
+      ],
+      "claude": [
+        5.690073200026684e-09,
+        5.7033049470751045e-09,
+        2.6127170507234625e-07
+      ],
+      "gemini": [
+        5.675195056623001e-09,
+        5.733721033557196e-09,
+        2.613166497610178e-07
+      ]
+    }
+  }
+};
+        let currentChartType = 'line';
+        let mainChartInstance = null;
+
+        function populateAlgorithms() {
+            const cat = document.getElementById('catSelect').value;
+            const algoSelect = document.getElementById('algoSelect');
+            algoSelect.innerHTML = '';
+            
+            for (const [key, val] of Object.entries(data)) {
+                if (cat === 'all' || val.category === cat) {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.textContent = val.title;
+                    algoSelect.appendChild(opt);
+                }
+            }
+            renderMainChart();
+        }
+
+        function onCategoryChange() {
+            populateAlgorithms();
+        }
+
+        function setChartType(type) {
+            currentChartType = type;
+            document.getElementById('btnLine').classList.toggle('active', type === 'line');
+            document.getElementById('btnBar').classList.toggle('active', type === 'bar');
+            renderMainChart();
+        }
+
+        function renderMainChart() {
+            const algoKey = document.getElementById('algoSelect').value;
+            if (!algoKey || !data[algoKey]) return;
+
+            const item = data[algoKey];
+            document.getElementById('mainChartTitle').textContent = item.title;
+            document.getElementById('mainChartSub').textContent = `Category: ${item.category.replace('_', ' ').toUpperCase()} | X: Scale, Y: Median Emissions (kg CO2eq)`;
+
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if (mainChartInstance) {
+                mainChartInstance.destroy();
+            }
+
+            const datasets = [
+                {
+                    label: 'ChatGPT',
+                    data: item.series.chatgpt,
+                    borderColor: '#10a37f',
+                    backgroundColor: 'rgba(16, 163, 127, 0.7)',
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    tension: 0.2
+                },
+                {
+                    label: 'Claude',
+                    data: item.series.claude,
+                    borderColor: '#d97706',
+                    backgroundColor: 'rgba(217, 119, 6, 0.7)',
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    tension: 0.2
+                },
+                {
+                    label: 'Gemini',
+                    data: item.series.gemini,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    tension: 0.2
+                }
+            ];
+
+            mainChartInstance = new Chart(ctx, {
+                type: currentChartType,
+                data: {
+                    labels: item.scales.map(s => 'Scale ' + s),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#f8fafc', font: { size: 14, weight: 'bold' } }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let val = context.raw;
+                                    return context.dataset.label + ': ' + val.toExponential(4) + ' kg CO2eq';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#334155' },
+                            ticks: { color: '#94a3b8', font: { size: 13, weight: 'bold' } },
+                            title: { display: true, text: 'Scale (Input Size N)', color: '#94a3b8', font: { size: 14, weight: 'bold' } }
+                        },
+                        y: {
+                            type: 'linear',
+                            grid: { color: '#334155' },
+                            ticks: { 
+                                color: '#94a3b8',
+                                font: { size: 12 },
+                                callback: function(value) {
+                                    return Number(value).toExponential(1);
+                                }
+                            },
+                            title: { display: true, text: 'Median Emissions (kg CO2eq)', color: '#94a3b8', font: { size: 14, weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize on load
+        populateAlgorithms();
+    </script>
+</body>
+</html>
